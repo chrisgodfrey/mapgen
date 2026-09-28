@@ -1,0 +1,51 @@
+.mapgen *{box-sizing:border-box}
+.mapgen .window-content{overflow:auto;padding:0}
+.mapgen .sa-shell{padding:20px;min-width:0;color:var(--color-text-primary,#e5e7eb)}
+.mapgen h1{font-size:1.5rem;margin:0 0 6px}
+.mapgen h2{font-size:1.2rem}
+.mapgen p{line-height:1.5}
+.mapgen .sa-heading,.mapgen .sa-scene-bar,.mapgen .sa-reopen,.mapgen .sa-preview-controls,.mapgen .sa-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mapgen .sa-heading{justify-content:space-between}
+.mapgen .sa-heading p{margin:0;opacity:.8}
+.mapgen button{min-height:36px;white-space:normal;width:auto;flex:none}
+.mapgen input:not([type=checkbox]),.mapgen select,.mapgen textarea{width:100%;min-width:0}
+.mapgen input:not([type=checkbox]),.mapgen select{min-height:36px}
+.mapgen label{display:block;line-height:1.6}
+.mapgen textarea{resize:vertical}
+.mapgen input[type=checkbox]{vertical-align:middle}
+.mapgen :focus-visible{outline:2px solid #79cce3;outline-offset:3px}
+.mapgen .sa-import{border:1px dashed #8496a5;border-radius:8px;padding:16px;margin:20px 0 8px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.mapgen .sa-upload{flex:1;min-width:200px}
+.mapgen .sa-upload input{margin-top:8px}
+.mapgen .sa-upload>span{display:block;font-size:.9rem;opacity:.85}
+.mapgen .sa-metadata{border:1px solid #77889955;border-radius:6px;padding:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mapgen .sa-metadata p{font-size:.9rem;flex:1;min-width:200px;margin:0}
+.mapgen .sa-metadata>span{overflow-wrap:anywhere}
+.mapgen .sa-prompt-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.mapgen .sa-prompt-steps h2{font-size:1rem;margin-bottom:5px}
+.mapgen .sa-prompt-steps p{font-size:.9rem;margin-top:5px}
+.mapgen .sa-hint{opacity:.85}
+.mapgen .sa-reopen{flex:1;min-width:220px}
+.mapgen .sa-reopen label{flex:1}
+.mapgen .sa-status{font-size:.95rem;min-height:1.5em;margin:10px 0}
+.mapgen .sa-error{border-left:3px solid #c9937d;padding:8px 12px}
+.mapgen .sa-preview-controls{justify-content:flex-end;font-size:.9rem;padding:8px 0}
+.mapgen .sa-preview-controls>span{margin-right:auto}
+.mapgen .sa-preview{position:relative;width:100%;line-height:0;background:#151923;border-radius:6px;overflow:hidden}
+.mapgen .sa-preview img{display:block;width:100%;height:auto;border:0;border-radius:0}
+.mapgen .sa-preview canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mapgen .sa-preview svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mapgen .sa-legend{font-size:.82rem;opacity:.8;margin:8px 0 14px}
+.mapgen details{border-top:1px solid #77889955;padding:12px 0;margin-top:8px}
+.mapgen summary{cursor:pointer;line-height:1.6}
+.mapgen .sa-warnings{font-size:.9rem;color:inherit}
+.mapgen .sa-warnings ul{max-height:180px;overflow:auto;padding-left:24px}
+.mapgen .sa-scene-bar{margin:16px 0}
+.mapgen .sa-scene-bar>label{flex:1;min-width:200px}
+.mapgen .sa-primary{background:#244956;color:#fff;border:1px solid #79a9b8;padding:8px 18px}
+.mapgen .sa-primary:hover{background:#306071}
+.mapgen .sa-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin:12px 0}
+.mapgen .sa-empty{padding:45px 20px;text-align:center;border-radius:8px;background:#7b96a014;margin:16px 0}
+.mapgen .sa-actions{margin:12px 0}
+.mapgen button:disabled,.mapgen input:disabled{opacity:.55;cursor:wait}
+@media(max-width:650px){.mapgen .sa-shell{padding:12px}.mapgen .sa-heading{align-items:flex-start}.mapgen .sa-import{padding:12px}.mapgen .sa-preview-controls{justify-content:flex-start}.mapgen .sa-prompt-steps{grid-template-columns:1fr}}

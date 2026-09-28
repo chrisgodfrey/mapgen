@@ -1,0 +1,124 @@
+<section class="sa-shell">
+  <header class="sa-heading">
+    <div><h1>MapGen</h1><p>AI-assisted battlemaps for Foundry VTT.</p></div>
+    <button type="button" data-action="newProject">New import</button>
+  </header>
+
+  <details class="sa-contract" {{#if contractOpen}}open{{/if}}>
+    <summary>Make a battlemap in two turns</summary>
+    <label>Location brief<textarea name="brief" rows="2" placeholder="Describe the place, atmosphere and details that matter...">{{brief}}</textarea></label>
+    <div class="sa-prompt-steps">
+      <section aria-label="Generate battlemap">
+        <h2>Step 1 - Generate battlemap</h2>
+        <p>Give your frontier model the brief and this prompt. Make the finished art first.</p>
+        <button type="button" data-action="copyBattlemapPrompt">Copy battlemap prompt</button>
+        <details {{#if battlemapTextOpen}}open{{/if}}><summary>Battlemap prompt text</summary>
+          <textarea name="battlemapPrompt" aria-label="Battlemap prompt" rows="8" readonly>{{battlemapPrompt}}</textarea>
+        </details>
+      </section>
+      <section aria-label="Generate optional scene metadata">
+        <h2>Step 2 - Generate scene metadata (optional)</h2>
+        <p>Use Step 2 in the same ChatGPT conversation after the battlemap image has finished generating.</p>
+        <button type="button" data-action="copyMetadataPrompt">Copy metadata follow-up</button>
+        <p class="sa-hint">A higher reasoning mode may improve this step, if available. It is not required.</p>
+        <details {{#if metadataTextOpen}}open{{/if}}><summary>Metadata follow-up text</summary>
+          <textarea name="metadataPrompt" aria-label="Metadata follow-up" rows="10" readonly>{{metadataPrompt}}</textarea>
+        </details>
+      </section>
+    </div>
+  </details>
+
+  <div class="sa-import" data-drop="image">
+    <label class="sa-upload">Battlemap image
+      <span>Drop a PNG here or choose a file. You can select the image and JSON together.</span>
+      <input type="file" name="imageFile" accept=".png,image/png,.json,application/json" multiple aria-label="Import battlemap image">
+    </label>
+    {{#if projects.length}}
+    <div class="sa-reopen">
+      <label>Saved battlemaps
+        <select name="projectId">
+          {{#each projects}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+        </select>
+      </label>
+      <button type="button" data-action="openProject">Reopen</button>
+    </div>
+    {{/if}}
+  </div>
+  <div class="sa-metadata" data-drop="metadata">
+    <label>Scene metadata (optional)
+      <input type="file" name="metadataFile" accept=".json,application/json" aria-label="Import optional scene metadata">
+    </label>
+    <p>Drop scene.json here before or after its image. Image-only import is ready for play.</p>
+    {{#if metadataName}}<span>{{metadataName}}</span>{{#unless saved}}<button type="button" data-action="clearMetadata">Use image only</button>{{/unless}}{{/if}}
+    {{#if saved}}<p>New metadata prepares a new scene copy. This saved scene and its native edits stay unchanged.</p>{{/if}}
+  </div>
+
+  <p class="sa-status" role="status" aria-live="polite">{{status}}</p>
+  {{#if error}}<p class="sa-error" role="alert">{{error}}</p>{{/if}}
+
+  {{#if hasProject}}
+  <div class="sa-scene-bar">
+    <label>Scene name <input name="sceneName" value="{{scene.name}}" maxlength="200"></label>
+    {{#if saved}}
+      <button type="button" data-action="applySettings">Save settings</button>
+      <button type="button" data-action="viewScene" class="sa-primary">Open in Foundry</button>
+    {{else}}
+      <button type="button" data-action="createScene" class="sa-primary" {{#unless canCreate}}disabled{{/unless}}>Create and open in Foundry</button>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  {{#if hasImage}}
+  <section aria-label="Battlemap preview" class="sa-map-section">
+    <div class="sa-preview-controls">
+      <span>{{counts}}</span>
+      <label><input type="checkbox" name="overlay" {{#if overlay}}checked{{/if}}> Geometry overlay</label>
+      <label><input type="checkbox" name="showGrid" {{#if showGrid}}checked{{/if}}> Preview grid</label>
+      <label><input type="checkbox" name="showLighting" {{#if showLighting}}checked{{/if}}> Lighting preview</label>
+    </div>
+    <div class="sa-preview">
+      <img src="{{previewUrl}}" alt="Imported battlemap artwork" draggable="false">
+      <canvas data-lighting-preview aria-hidden="true"></canvas>
+      <svg data-overlay aria-hidden="true"></svg>
+    </div>
+    <p class="sa-legend">Overlay: walls in ivory, doors in gold, windows in blue, lights as dotted circles. The artwork stays unchanged.</p>
+    <p class="sa-legend">Lighting is an approximate tone/coverage preview. Foundry applies its own wall occlusion, token vision and shader effects.</p>
+  </section>
+  {{/if}}
+
+  {{#if warningCount}}
+  <details class="sa-warnings">
+    <summary>{{#if hasImage}}Imported with {{warningCount}} warnings. The battlemap is ready to use.{{else}}{{warningCount}} metadata notes. An image can be imported without metadata.{{/if}}</summary>
+    <ul>{{#each warnings}}<li>{{this}}</li>{{/each}}</ul>
+  </details>
+  {{/if}}
+
+  {{#if hasProject}}
+  <details class="sa-settings" {{#if settingsOpen}}open{{/if}}>
+    <summary>Grid and lighting settings</summary>
+    <p>Foundry draws the gameplay grid independently. Changing grid size calibrates token/game scale and does not move or resize the battlemap or its walls.</p>
+    <div class="sa-fields">
+      <label>Grid size (pixels)<input type="number" name="gridSize" value="{{scene.grid.size}}" min="20" max="1000" step="1"></label>
+      <label>Distance per square<input type="number" name="distance" value="{{scene.grid.distance}}" min="0.01" max="10000" step="any"></label>
+      <label>Units<input name="units" value="{{scene.grid.units}}" maxlength="32"></label>
+      <label>Imported light radius
+        <select name="lightRadiusScale">
+          {{#each radiusOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+      </label>
+      <label>Darkness (0 to 1)<input type="number" name="darkness" value="{{scene.darkness}}" min="0" max="1" step="0.05"></label>
+      <label><input type="checkbox" name="globalLight" {{#if scene.globalLight}}checked{{/if}}> Global illumination</label>
+    </div>
+    <p data-grid-scale>{{gridScale}}</p>
+    <p data-grid-note role="status" aria-live="polite">{{gridPreviewNote}}</p>
+    <p data-lighting-state role="status" aria-live="polite">{{lightingSummary}}</p>
+    <p class="sa-hint">Global illumination provides basic scene visibility while walls still control line of sight. Local lights add color, emphasis and effects. Reserve stronger darkness for deliberately restricted visibility.</p>
+    <p class="sa-hint">Smaller radii reduce overlapping light without moving emitters. 100% uses the baseline, including native radius edits, not a repeated multiplication.</p>
+    {{#if untrackedLighting}}<p class="sa-hint">No saved lighting baseline: explicit radius tuning applies to the lights currently in this scene.</p>{{/if}}
+    {{#if unmanagedLights}}<p class="sa-hint">{{unmanagedLights}} later native-added lights are left unchanged.</p>{{/if}}
+    <button type="button" data-action="applySettings">{{#if saved}}Save scene settings{{else}}Apply to preview{{/if}}</button>
+  </details>
+  {{else}}
+    {{#unless hasImage}}<div class="sa-empty"><h2>One finished battlemap is enough.</h2><p>Import its image to play. Add optional scene.json for walls, doors, windows and lights.</p></div>{{/unless}}
+  {{/if}}
+</section>

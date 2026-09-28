@@ -1,0 +1,15 @@
+{
+  "name": "mapgen",
+  "private": true,
+  "version": "1.0.2",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:browser": "node tests/browser-runner.js",
+    "package": "node tools/package-module.js"
+  },
+  "devDependencies": {
+    "fflate": "0.8.3",
+    "handlebars": "^4.7.9"
+  }
+}

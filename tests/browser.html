@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MapGen import verification</title>
+  <link rel="stylesheet" href="/styles/mapgen.css">
+  <style>
+    body{background:#171c25;color:#e5e7eb;font:15px system-ui;margin:20px}
+    button,input,select,textarea{background:#252f3d;color:#e5e7eb;border:1px solid #7b8da1;border-radius:4px;padding:7px;font:inherit}
+    button{cursor:pointer}button:hover{background:#35475b}
+    #wizard,#evidence{max-width:1100px;margin:auto}
+    #evidence{font-size:13px;color:#bdc7d3}#results{white-space:pre-wrap;max-height:250px;overflow:auto}
+    .mapgen{--color-text-primary:#e5e7eb}
+  </style>
+</head>
+<body>
+  <section id="evidence">
+    <p>Synthetic battlemap test input. Real browser decoding and UI; mocked Foundry APIs. Not artwork-quality evidence.</p>
+    <details><summary id="check-summary">Browser checks running...</summary><pre id="results"></pre></details>
+  </section>
+  <main id="wizard" class="mapgen"></main>
+  <script src="/node_modules/handlebars/dist/handlebars.js"></script>
+  <script type="module" src="/tests/browser-checks.js"></script>
+</body>
+</html>
